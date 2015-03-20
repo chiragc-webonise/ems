@@ -38,14 +38,14 @@ DROP TABLE IF EXISTS departments_employees;
 CREATE TABLE IF NOT EXISTS departments_employees(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	employee_id int(8) NOT NULL,
-	department_id int(8),
+	department_id int(8) NOT NULL,
 	from_date datetime NOT NULL,
 	to_date datetime,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
-	FOREIGN KEY (employee_id) REFERENCES employees(id),
-	FOREIGN KEY (department_id) REFERENCES departments(id)
+	FOREIGN KEY (employee_id) REFERENCES employees(id) on UPDATE CASCADE,
+	FOREIGN KEY (department_id) REFERENCES departments(id) on UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -55,14 +55,14 @@ DROP TABLE IF EXISTS departments_managers;
 CREATE TABLE IF NOT EXISTS departments_managers(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	manager_id int(8) NOT NULL,
-	department_id int(8),
+	department_id int(8) NOT NULL,
 	from_date datetime NOT NULL,
 	to_date datetime,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
-	FOREIGN KEY (manager_id) REFERENCES employees(id),
-	FOREIGN KEY (department_id) REFERENCES departments(id)
+	FOREIGN KEY (manager_id) REFERENCES employees(id) on UPDATE CASCADE,
+	FOREIGN KEY (department_id) REFERENCES departments(id) on UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS salaries(
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
-	FOREIGN KEY (employee_id) REFERENCES employees(id)
+	FOREIGN KEY (employee_id) REFERENCES employees(id) on UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -100,12 +100,13 @@ DROP TABLE IF EXISTS employees_titles;
 CREATE TABLE IF NOT EXISTS employees_titles(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	employee_id int(8) NOT NULL,
-	job_title_id varchar(32) NOT NULL,
+	job_title_id int(8) NOT NULL,
+	salary float NOT NULL,
 	from_date datetime NOT NULL,
 	to_date datetime,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
-	FOREIGN KEY (employee_id) REFERENCES employees(id),
-	FOREIGN KEY (job_title_id) REFERENCES job_titles(id)
+	FOREIGN KEY (employee_id) REFERENCES employees(id) on UPDATE CASCADE,
+	FOREIGN KEY (job_title_id) REFERENCES job_titles(id) on UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
