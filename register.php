@@ -67,7 +67,7 @@
 		   			$params = array(
 				   		'name' => $name,
 				   		'username' => $username,
-				   		'password' => $passwd,
+				   		'password' => md5($passwd),
 				   		'role_id' => $adminRole,
 				   		'created' => date('Y-m-d H:i:s'),
 				   		'modified' => date('Y-m-d H:i:s')

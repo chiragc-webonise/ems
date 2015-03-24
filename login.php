@@ -11,7 +11,7 @@
 		);
 		$result = $db->select('user', 'username = :username', $bind);
 		if(!empty($result))
-			header("Location: view.php");
+			header("Location: index.php");
 	}
 	if(isset($_POST['submitLogin']))
 	{
@@ -34,7 +34,7 @@
 	   	if(!empty($username) && !empty($passwd)) {
 		   	$bind = array(
 		   		'username' => $username,
-		   		'password' => $passwd
+		   		'password' => md5($passwd)
 	   		);
 	   		$results = $db->select('user','username = :username AND password = :password',$bind);
 	   		if(empty($results)) {
