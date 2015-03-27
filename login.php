@@ -45,7 +45,7 @@
 	   			$bindEmp = array(':userID' => $results[0]['id']);
 	   			$empID = $db->select('employees', 'user_id = :userID', $bindEmp, 'id');
 	   			$_SESSION["username"] = $username;
-	   			$_SESSION["empID"] = $empID[0]['id'];
+	   			$_SESSION["empID"] = md5($empID[0]['id']);
 	   			if(!empty($checkRole))
 			   		$_SESSION['isAdmin'] = $results[0]['role_id'];
 	   			header("Location: employee.php");

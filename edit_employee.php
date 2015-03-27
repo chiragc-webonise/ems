@@ -395,6 +395,9 @@
 				<li class="active"><a href="employee.php">Employee</a></li>
 				<li><a href="department.php">Departments</a></li>
 				<li><a href="job_title.php">Job Titles</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" style="text-align:right;" >
+				<li><a href="profile.php">Profile</a></li>
 				<li style="text-align:right;"><a href="logout.php">Logout</a></li>
 			</ul>
 		</div>
@@ -417,7 +420,7 @@
 					$bindUserID = array(':id' => $employee[0]['id']);
 					$userInfo = $db->select('users', 'id = :id',$bindUserID);
 		?>
-					<form name="registerForm" class="form-signin" method="post" enctype="multipart/form-data">
+				<form name="registerForm" class="form-signin" method="post" enctype="multipart/form-data">
 				<h2 class="form-signin-heading">Edit Employee</h2>
 				<br/>
 				<?php
@@ -446,7 +449,11 @@
 					</label><br/><br/>
 				</div>
 				<div>
-					<input type="text" name="date_of_birth" id="date_of_birth" class="form-control" placeholder="Date Of Birth" value="<?php echo !empty($employee[0]['date_of_birth']) ? date('m/d/Y',strtotime($employee[0]['date_of_birth'])) : '';?>">
+					<?php if(isset($_POST['date_of_birth'])) : ?>
+						<input type="text" name="date_of_birth" id="date_of_birth" class="form-control" placeholder="Date Of Birth" value="<?php echo isset($_POST['date_of_birth']) ? $_POST['date_of_birth'] : '';?>">
+					<?php else : ?>
+						<input type="text" name="date_of_birth" id="date_of_birth" class="form-control" placeholder="Date Of Birth" value="<?php echo isset($employee[0]['date_of_birth']) ? date('m/d/Y',strtotime($employee[0]['date_of_birth'])) : '';?>">
+					<?php endif;?>
 					<br/>
 				</div>
 				<div>

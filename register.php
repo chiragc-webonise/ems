@@ -87,7 +87,7 @@
 
 			   			$bindEmp = array(':userID' => $userId);
 			   			$empID = $db->select('employees', 'user_id = :userID', $bindEmp, 'id');
-			   			$_SESSION["empID"] = $empID[0]['id'];
+			   			$_SESSION["empID"] = md5($empID[0]['id']);
 			   		}
 			   		$_SESSION['username'] = $username;
 			   		$_SESSION['isAdmin'] = $adminRole;

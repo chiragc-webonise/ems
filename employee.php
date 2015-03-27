@@ -40,9 +40,12 @@
     <nav class="navbar navbar-default navbar-fixed-top"> <!-- navbar-inverse -->
 		<div class="container">
 			<ul class="nav navbar-nav navbar-center" style="text-align:center;" >
-				<li class="active" class="active"><a href="employee.php">Employee</a></li>
+				<li class="active"><a href="employee.php">Employee</a></li>
 				<li><a href="department.php">Departments</a></li>
 				<li><a href="job_title.php">Job Titles</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" style="text-align:right;" >
+				<li><a href="profile.php">Profile</a></li>
 				<li style="text-align:right;"><a href="logout.php">Logout</a></li>
 			</ul>
 		</div>
@@ -68,7 +71,7 @@
 				<tbody>
 					<?php 
 						$bindLoginEmp = array(':empID' => $loginEmpID);
-						$empDetails = $db->select('employees', 'id != :empID', $bindLoginEmp);
+						$empDetails = $db->select('employees', 'md5(id) != :empID', $bindLoginEmp);
 						if(!empty($empDetails)) :
 				    		foreach($empDetails as $key => $value):
 				    			$bindId = array(':user_id' => $value['user_id']);

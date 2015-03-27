@@ -336,6 +336,9 @@
 				<li class="active"><a href="employee.php">Employee</a></li>
 				<li><a href="department.php">Departments</a></li>
 				<li><a href="job_title.php">Job Titles</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" style="text-align:right;" >
+				<li><a href="profile.php">Profile</a></li>
 				<li style="text-align:right;"><a href="logout.php">Logout</a></li>
 			</ul>
 		</div>
