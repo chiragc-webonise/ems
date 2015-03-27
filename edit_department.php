@@ -5,20 +5,21 @@
 	include $config;
 	$db = new db("mysql:host=127.0.0.1;port=3306;dbname=ems", "root", "root");
 	$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+	$isAdmin = isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : '0';
 	$loginDetails = array();
 	$id = isset($_GET['id']) ? $_GET['id'] : '';
 	if(isset($username)){
 		$bindUser = array(
 			':username' => $username
 		);
-		$loginDetails = $db->select('user', 'username = :username', $bindUser);
+		$loginDetails = $db->select('users', 'username = :username', $bindUser);
 		if(!$loginDetails)
 			header("Location: login.php");
 
 		if(isset($_POST['editDepartment']))
 		{
 			$name = trim($_POST['name']);
-			$validate_name = "/^[A-Za-z &_]{3,20}$/";
+			$validate_name = "/^[A-Za-z &_]{3,128}$/";
 
 			if(empty($name)) {
 		      $error[] = 'Name cannot be blank.';
@@ -69,6 +70,10 @@
 	</nav>
 
 	<div style="padding-top:40px;padding-left:50px;" class="container">
+		<?php if(!$isAdmin): ?>
+			<span style=\"font-size:20px;font-weight:bold;\">You are not authorized to view this page.</span>
+			&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/><a href="department.php" class="btn btn-default">Back</a>
+		<?php else: ?>
 		<?php
 			$id = $_GET['id'];
 			if(!empty($id) && $id != ''):
@@ -103,7 +108,8 @@
 					
 					</form>
 			<?php endif;
-		endif;?>
+			endif; ?>
+		<?php endif;?>
 	</div>
 	
 	

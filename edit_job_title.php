@@ -5,25 +5,26 @@
 	include $config;
 	$db = new db("mysql:host=127.0.0.1;port=3306;dbname=ems", "root", "root");
 	$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+	$isAdmin = isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : '0';
 	$loginDetails = array();
 	$id = isset($_GET['id']) ? $_GET['id'] : '';
 	if(isset($username)){
 		$bindUser = array(
 			':username' => $username
 		);
-		$loginDetails = $db->select('user', 'username = :username', $bindUser);
+		$loginDetails = $db->select('users', 'username = :username', $bindUser);
 		if(!$loginDetails)
 			header("Location: login.php");
 
 		if(isset($_POST['editJobTitle']))
 		{
 			$title = trim($_POST['title']);
-			$validate_title = "/^[A-Za-z &_]{3,20}$/";
+			$validate_title = "/^[A-Za-z ]{3,128}$/";
 
 			if(empty($title)) {
 		      $error[] = 'Job Title cannot be blank.';
 		   	} elseif (!preg_match($validate_title, $title)) {
-		   		$error[] = "Only letters, space and characters i.e. & _  are allowed.";
+		   		$error[] = "Only letters and space are allowed.";
 		   	} else {
 		   		//Verify if job title already exists
 		   		$bind = array(
@@ -69,6 +70,10 @@
 	</nav>
 
 	<div style="padding-top:40px;padding-left:50px;" class="container">
+		<?php if(!$isAdmin): ?>
+			<span style=\"font-size:20px;font-weight:bold;\">You are not authorized to view this page.</span>
+			&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/><a href="job_title.php" class="btn btn-default">Back</a>
+		<?php else: ?>
 		<?php
 			$id = $_GET['id'];
 			if(!empty($id) && $id != ''):
@@ -103,7 +108,8 @@
 					
 					</form>
 			<?php endif;
-		endif;?>
+			endif; ?>
+		<?php endif;?>
 	</div>
 	
 	

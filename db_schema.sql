@@ -4,10 +4,22 @@
 
 
 -- ----------------------------
--- Table structure for user
+-- Table structure for user_roles
 -- ----------------------------
-DROP TABLE IF EXISTS user;
-CREATE TABLE IF NOT EXISTS user(
+DROP TABLE IF EXISTS user_roles;
+CREATE TABLE IF NOT EXISTS user_roles(
+	id int(8) NOT NULL AUTO_INCREMENT,
+	name varchar(16) NOT NULL,
+	created datetime NOT NULL,
+	modified datetime,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	name varchar(128) NOT NULL,
 	username varchar(128) NOT NULL,
@@ -20,42 +32,21 @@ CREATE TABLE IF NOT EXISTS user(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Table structure for user_roles
--- ----------------------------
-DROP TABLE IF EXISTS user_roles;
-CREATE TABLE IF NOT EXISTS user_roles(
-	id int(8) NOT NULL AUTO_INCREMENT,
-	name varchar(16) NOT NULL,
-	created datetime NOT NULL,
-	modified datetime,
-	PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-------- DEFAULT VALUES
-
-INSERT INTO `ems`.`user_roles` (`id`, `name`, `created`, `modified`)
-VALUES ('1', 'admin', '2015-03-24 14:23:43', NULL);
-INSERT INTO `ems`.`user_roles` (`id`, `name`, `created`, `modified`)
-VALUES ('2', 'manager', '2015-03-24 14:23:49', NULL);
-INSERT INTO `ems`.`user_roles` (`id`, `name`, `created`, `modified`)
-VALUES ('3', 'employee', '2015-03-24 14:23:57', NULL);
-
-
-
--- ----------------------------
 -- Table structure for employees
 -- ----------------------------
 DROP TABLE IF EXISTS employees;
 CREATE TABLE IF NOT EXISTS employees(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	name varchar(128) NOT NULL,
-	manager_id int(8),
+	manager_id int(8) DEFAULT NULL,
+	user_id int(8),
 	date_of_birth varchar(10) DEFAULT NULL,
 	gender varchar(10) DEFAULT NULL,
-	hire_date datetime NOT NULL,
+	hire_date varchar(10) DEFAULT NULL,
 	created datetime NOT NULL,
 	modified datetime,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id) on UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -78,8 +69,8 @@ CREATE TABLE IF NOT EXISTS departments_employees(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	employee_id int(8) NOT NULL,
 	department_id int(8) NOT NULL,
-	from_date datetime NOT NULL,
-	to_date datetime,
+	from_date varchar(10) NOT NULL,
+	to_date varchar(10) DEFAULT NULL,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
@@ -95,8 +86,8 @@ CREATE TABLE IF NOT EXISTS departments_managers(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	manager_id int(8) NOT NULL,
 	department_id int(8) NOT NULL,
-	from_date datetime NOT NULL,
-	to_date datetime,
+	from_date varchar(10) NOT NULL,
+	to_date varchar(10) DEFAULT NULL,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
@@ -111,9 +102,9 @@ DROP TABLE IF EXISTS salaries;
 CREATE TABLE IF NOT EXISTS salaries(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	employee_id int(8) NOT NULL,
-	salary float NOT NULL,
-	from_date datetime NOT NULL,
-	to_date datetime,
+	salary bigint(15) NOT NULL,
+	from_date varchar(10) NOT NULL,
+	to_date varchar(10) DEFAULT NULL,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
@@ -140,12 +131,21 @@ CREATE TABLE IF NOT EXISTS employees_titles(
 	id int(8) NOT NULL AUTO_INCREMENT,
 	employee_id int(8) NOT NULL,
 	job_title_id int(8) NOT NULL,
-	salary float NOT NULL,
-	from_date datetime NOT NULL,
-	to_date datetime,
+	from_date varchar(10) NOT NULL,
+	to_date varchar(10) DEFAULT NULL,
 	created datetime NOT NULL,
 	modified datetime,
 	PRIMARY KEY (id),
 	FOREIGN KEY (employee_id) REFERENCES employees(id) on UPDATE CASCADE,
 	FOREIGN KEY (job_title_id) REFERENCES job_titles(id) on UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+
+INSERT INTO `ems`.`user_roles` (`id`, `name`, `created`, `modified`)
+	VALUES ('1', 'admin', '2015-03-24 14:23:43', NULL);
+INSERT INTO `ems`.`user_roles` (`id`, `name`, `created`, `modified`)
+	VALUES ('2', 'manager', '2015-03-24 14:23:49', NULL);
+INSERT INTO `ems`.`user_roles` (`id`, `name`, `created`, `modified`)
+	VALUES ('3', 'employee', '2015-03-24 14:23:57', NULL);

@@ -4,12 +4,13 @@
 	include $config;
 	$db = new db("mysql:host=127.0.0.1;port=3306;dbname=ems", "root", "root");
 	$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+	$isAdmin = isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : '0';
 	$loginDetails = array();
 	if(isset($username)){
 		$bind = array(
 			':username' => $username
 		);
-		$loginDetails = $db->select('user', 'username = :username', $bind);
+		$loginDetails = $db->select('users', 'username = :username', $bind);
 		if(!$loginDetails)
 			header("Location: login.php");
 	}
@@ -44,30 +45,32 @@
 	<div style="padding-top:40px;padding-left:50px;" class="jobtitle">
 		<?php if(!empty($loginDetails)) { ?>
 			<span class="dptmnt-details"> Job Title Details</span><br/><br/>
-			<?php
-				$jobtitleDetails = $db->select('job_titles');
-			?>
 			<table class="table table-striped table-bordered table-condensed">
 				<thead>
 					<tr>
 						<th style="text-align:center;">#</th>
 						<th style="text-align:center;">Name</th>
 						<th style="text-align:center;">Created On</th>
-						<th style="text-align:center;"></th>
+						<?php if($isAdmin): ?>
+							<th style="text-align:center;"></th>
+						<?php endif;?>
 					</tr>
 				</thead>
 				<tbody>
-					<?php if(!empty($jobtitleDetails)) :
+					<?php $jobtitleDetails = $db->select('job_titles');
+					if(!empty($jobtitleDetails)) :
 			    		foreach($jobtitleDetails as $key => $value): ?>
 							<tr>
 								<td style="text-align:center;"><?php echo ($key+1);?></td>
 								<td style="text-align:center;" class="col-md-6"><?php echo $value['title'];?></td>
-								<td style="text-align:center;" class="col-md-3"><?php echo date('d M Y H:i:s',strtotime($value['created']));?></td>
-								<td style="text-align:center;" class="col-md-1"> 
-									<a class="btn btn-default btn-lg edit-job-title" id="<?php echo md5($value['id']);?>">
-							          <span class="glyphicon glyphicon-pencil"></span> 
-							        </a>
-								</td>
+								<td style="text-align:center;" class="col-md-3"><?php echo date('d M Y',strtotime($value['created']));?></td>
+								<?php if($isAdmin): ?>
+									<td style="text-align:center;" class="col-md-1"> 
+										<a class="edit-job-title" id="<?php echo md5($value['id']);?>">
+								          <span class="glyphicon glyphicon-pencil"></span> 
+								        </a>
+									</td>
+								<?php endif;?>
 							</tr>
 						<?php endforeach; ?>
 					<?php else : ?>
@@ -77,7 +80,9 @@
 					<?php endif; ?>	
 				</tbody>
 			</table>
-			<a href="add_job_title.php" style="float:right;" class="btn btn-default">Add Job Title</a>
+			<?php if($isAdmin): ?>
+				<a href="add_job_title.php" style="float:right;" class="btn btn-default">Add Job Title</a>
+			<?php endif;?>
 		<?php }?>	
 	</div>
 	

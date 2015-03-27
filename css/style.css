@@ -166,3 +166,12 @@ input.valid, textarea.valid{
 	font-size: 18px;
 	font-weight: bold;
 }
+.employee{
+  max-width: 1000px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.employee .employee-details{
+	font-size: 18px;
+	font-weight: bold;
+}

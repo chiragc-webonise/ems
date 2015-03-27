@@ -9,7 +9,7 @@
 		$bind = array(
 			':username' => $username
 		);
-		$result = $db->select('user', 'username = :username', $bind);
+		$result = $db->select('users', 'username = :username', $bind);
 		if(!empty($result))
 			header("Location: view.php");
 	}
@@ -20,7 +20,7 @@
 		$passwd = trim($_POST["passwd"]);
 		$retypePasswd = trim($_POST['retypePasswd']);
 
-		$validate_name = "/^[A-Za-z ]{3,20}$/";
+		$validate_name = "/^[A-Za-z &_]{3,128}$/";
 		$validate_username = "/^[A-Za-z0-9_]{1,20}$/";
 
 		if(empty($name)) {
@@ -55,7 +55,7 @@
 	   			$bind = array(
 	   				':username' => $username
    				);
-   				$oldRecord = $db->select('user', 'username = :username', $bind);
+   				$oldRecord = $db->select('users', 'username = :username', $bind);
    				if(!empty($oldRecord)) {
    					$error[] = "Username already exists.";
    				} else {
@@ -69,12 +69,29 @@
 				   		'username' => $username,
 				   		'password' => md5($passwd),
 				   		'role_id' => $adminRole,
-				   		'created' => date('Y-m-d H:i:s'),
-				   		'modified' => date('Y-m-d H:i:s')
+				   		'created' => date('Y-m-d H:i:s')
 			   		);
-			   		$db->insert('user',$params);
+			   		$db->insert('users',$params);
+
+			   		//Insert into employee table for admin
+			   		$bindRole = array(':roleId' => $adminRole);
+					$addCond = 'Order By id DESC limit 1';
+			   		$userId = $db->select('users', 'role_id = :roleId', $bindRole, 'id', $addCond);
+			   		if(!empty($userId)){
+			   			$paramsEmp = array(
+				   			'name' => $name,
+				   			'user_id' => $userId[0]['id'],
+					   		'created' => date('Y-m-d H:i:s')
+			   			);
+			   			$db->insert('employees',$paramsEmp);
+
+			   			$bindEmp = array(':userID' => $userId);
+			   			$empID = $db->select('employees', 'user_id = :userID', $bindEmp, 'id');
+			   			$_SESSION["empID"] = $empID[0]['id'];
+			   		}
 			   		$_SESSION['username'] = $username;
-			   		header("Location: view.php");
+			   		$_SESSION['isAdmin'] = $adminRole;
+			   		header("Location: employee.php");
 			   	}
 	   		}
 	   	}		

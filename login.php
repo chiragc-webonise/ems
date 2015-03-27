@@ -9,7 +9,7 @@
 		$bind = array(
 			':username' => $username
 		);
-		$result = $db->select('user', 'username = :username', $bind);
+		$result = $db->select('users', 'username = :username', $bind);
 		if(!empty($result))
 			header("Location: index.php");
 	}
@@ -36,12 +36,19 @@
 		   		'username' => $username,
 		   		'password' => md5($passwd)
 	   		);
-	   		$results = $db->select('user','username = :username AND password = :password',$bind);
+	   		$results = $db->select('users','username = :username AND password = :password',$bind);
 	   		if(empty($results)) {
 	   			$error[] = "Invalid username or password.";
 	   		} else {
+	   			$bind = array(':id' => $results[0]['role_id'], ':name' => 'admin');
+	   			$checkRole = $db->select('user_roles', 'id = :id AND name = :name', $bind);
+	   			$bindEmp = array(':userID' => $results[0]['id']);
+	   			$empID = $db->select('employees', 'user_id = :userID', $bindEmp, 'id');
 	   			$_SESSION["username"] = $username;
-	   			header("Location: index.php");
+	   			$_SESSION["empID"] = $empID[0]['id'];
+	   			if(!empty($checkRole))
+			   		$_SESSION['isAdmin'] = $results[0]['role_id'];
+	   			header("Location: employee.php");
 	   		}
 	   	}		
 	}
