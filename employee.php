@@ -78,8 +78,20 @@
 				    			$userDetail = $db->select('users', 'id =:user_id', $bindId, 'role_id');?>
 								<tr>
 									<td style="text-align:center;"><?php echo ($key+1);?></td>
-									<td style="text-align:center;"><?php echo $value['name'];?></td>
-									<td style="text-align:center;">
+									<td >
+										<?php if($empDetails[$key]['gender'] == 'male') : ?>
+											<img style="align:right;"src="/images/male.png"/>
+										<?php elseif($empDetails[$key]['gender'] == 'female') : ?>
+											<img style="align:right;"src="/images/female.png"/>
+										<?php endif;?>
+										<?php 
+											if($userDetail[0]['role_id'] != $adminRoleId)
+												echo $value['name'];
+											else
+												echo $value['name'] .' &nbsp;&nbsp;<img style="align:right;"src="/images/admin.png"/>';
+										?>
+									</td>
+									<td >
 										<?php
 											$addCond = 'Order by id DESC limit 1';
 											$departmentIdList = array();
@@ -99,7 +111,7 @@
 											}
 										?>
 									</td>
-									<td style="text-align:center;">
+									<td >
 										<?php
 											$addCond = 'Order by id DESC limit 1';
 											$jobTitleIdList = array();
