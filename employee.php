@@ -71,7 +71,7 @@
 				<tbody>
 					<?php 
 						$bindLoginEmp = array(':empID' => $loginEmpID);
-						$empDetails = $db->select('employees', 'md5(id) != :empID', $bindLoginEmp);
+						$empDetails = $db->select('employees', 'md5(id) != :empID', $bindLoginEmp, '*', 'order by name ASC');
 						if(!empty($empDetails)) :
 				    		foreach($empDetails as $key => $value):
 				    			$bindId = array(':user_id' => $value['user_id']);

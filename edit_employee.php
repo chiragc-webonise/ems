@@ -267,7 +267,7 @@
 						$to_jobtitle_date = date('Y-m-d',strtotime($to_jobtitle_date));
 
 					if(isset($findJTData) && !empty($findJTData) && $findJTData[0]['job_title_id'] == $selectedJobTitle) { 
-						//update old salary dates
+						//update old title dates
 						$updateBindJt = array('empID' => $id, ':id' => $findJTData[0]['id']);
 				   		$updateEmpJT = array(
 			   				'from_date' => $from_jobtitle_date,
@@ -277,6 +277,7 @@
 			   				$updateEmpJT['to_date'] = $to_jobtitle_date;
 			   			$db->update('employees_titles', $updateEmpJT, 'md5(employee_id) = :empID AND id = :id', $updateBindJt);
 					} else { 
+						//insert new title and update old title
 						$newParamJobTitle = array(
 			   				'job_title_id' => $selectedJobTitle,
 			   				'employee_id' => $empId[0]['id'],
@@ -284,9 +285,21 @@
 				   			'created' => date('Y-m-d H:i:s')
 		   				);
 		   				if(!empty($to_jobtitle_date))
-			   				$newParamJobTitle['to_date'] = $to_jobtitle_date;
-				   		
+			   				$newParamJobTitle['to_date'] = $to_jobtitle_date;				   		
 						$db->insert('employees_titles', $newParamJobTitle);
+
+						//update old title dates
+						if(isset($findJTData) && !empty($findJTData)) {
+							$updateBindJt = array('empID' => $id, ':id' => $findJTData[0]['id']);
+					   		$updateEmpJT = array(
+					   			'modified' => date('Y-m-d H:i:s')
+				   			);
+			   				if(!empty($to_jobtitle_date))
+				   				$updateEmpJT['to_date'] = $to_jobtitle_date;
+				   			else
+				   				$updateEmpJT['to_date'] = $from_jobtitle_date;
+				   			$db->update('employees_titles', $updateEmpJT, 'md5(employee_id) = :empID AND id = :id', $updateBindJt);
+				   		}
 					}
 		   		}
 
