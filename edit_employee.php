@@ -294,10 +294,7 @@
 					   		$updateEmpJT = array(
 					   			'modified' => date('Y-m-d H:i:s')
 				   			);
-			   				if(!empty($to_jobtitle_date))
-				   				$updateEmpJT['to_date'] = $to_jobtitle_date;
-				   			else
-				   				$updateEmpJT['to_date'] = $from_jobtitle_date;
+			   				$updateEmpJT['to_date'] = $from_jobtitle_date;
 				   			$db->update('employees_titles', $updateEmpJT, 'md5(employee_id) = :empID AND id = :id', $updateBindJt);
 				   		}
 					}
@@ -313,6 +310,7 @@
 			   			$to_slry_date = date('Y-m-d',strtotime($to_slry_date));
 
 			   		if(!empty($findSlryData) && $findSlryData[0]['salary'] != $salary){
+			   			//insert new salary
 			   			$newParamSalary = array(
 			   				'salary' => $salary,
 			   				'employee_id' => $empId[0]['id'],
@@ -323,6 +321,17 @@
 			   				$newParamSalary['to_date'] = $to_slry_date;
 				   		
 						$db->insert('salaries', $newParamSalary);
+
+			   			//update old salary
+			   			if(!empty($findSlryData)) {
+							$updateBindSlry = array('id' => $id, ':slryId' => $findSlryData[0]['id']);
+					   		$updateSlry = array(
+					   			'modified' => date('Y-m-d H:i:s')
+				   			);
+			   				$updateSlry['to_date'] = $from_slry_date;
+				   			$db->update('salaries', $updateSlry, 'md5(employee_id) = :id AND id = :slryId', $updateBindSlry);
+				   		}
+
 					} else {
 						//update old salary dates
 						$updateBindSlry = array('id' => $id, ':slryId' => $findSlryData[0]['id']);
