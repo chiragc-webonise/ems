@@ -85,7 +85,7 @@
 			   			);
 			   			$db->insert('employees',$paramsEmp);
 
-			   			$bindEmp = array(':userID' => $userId);
+			   			$bindEmp = array(':userID' => $userId[0]['id']);
 			   			$empID = $db->select('employees', 'user_id = :userID', $bindEmp, 'id');
 			   			$_SESSION["empID"] = md5($empID[0]['id']);
 			   		}
