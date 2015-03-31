@@ -1,6 +1,4 @@
 <?php
-
-
  	require (dirname (__FILE__) . "/php-excel/class-excel-xml.inc.php");
 	session_start();
     $config = dirname(__FILE__)."/config/config.php";
