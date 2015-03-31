@@ -10,7 +10,7 @@
 	$data[1][] = 'Employee ID';
     $data[1][] = 'Employee Name';
     $data[1][] = 'Current Manager Name';
-    $data[1][] = 'Current Salary';
+    $data[1][] = 'Current Salary (INR)';
     $data[1][] = 'Current Department';
     $data[1][] = 'Current Department Manager';
 	$data[1][] = 'Current Title';
@@ -18,7 +18,7 @@
 	$data[1][] = 'Gender';
 	$data[1][] = 'DOB';
 	$data[1][] = 'Last Title';
-	$data[1][] = 'Last Salary';
+	$data[1][] = 'Last Salary (INR)';
 	$data[1][] = 'Last Title From Date';
 	$data[1][] = 'Last Title To Date';
 	$data[1][] = 'Last Department Name';
