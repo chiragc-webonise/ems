@@ -49,8 +49,8 @@
 
 	$xls = new Excel_XML;
 	$xls->addArray($data);
-	$xls->setWorksheetTitle('List');
-	$xls->generateXML ("aaaaaaaaa");
+	$xls->setWorksheetTitle('Employee List');
+	$xls->generateXML ("EmployeeList");
 ?>
 
 
