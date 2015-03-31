@@ -26,13 +26,6 @@
 <link rel="stylesheet" href="css/table.css" type="text/css" />
 <script src="/js/jquery-1.11.2.js"></script>
 </head>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('.download-excel').click(function(){
-            alert("hello");
-        });
-    });
-</script>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top"> <!-- navbar-inverse -->
         <div class="container">
@@ -50,6 +43,7 @@
     </nav>
     <?php
         $q = $db->runProcedure('CALL GetEmployeeList()');
+        $flag = false;
     ?>
     <div style="padding-top:40px;padding-left:20px;">
         <span class="employee-details" style="font-size: 30px;"> Employee List</span><br/><br/>
@@ -73,50 +67,34 @@
                 <th>Salary Hike (%)</th>
             </tr>
         <?php while ($r = $q->fetch()): ?>
-                <tr>
-                    <td class="col-xs-2"><?php echo $r['emp_id']; ?></td>
-                    <td class="col-xs-4"><?php echo $r['emp_name']; ?></td>
-                    <td class="col-xs-2"><?php echo $r['current_manager_name']; ?></td>
-                    <td class="col-xs-2"><?php echo !empty($r['current_salary']) ? number_format($r['current_salary'],2) : ''; ?></td>
-                    <td class="col-xs-2"><?php echo $r['current_department']; ?></td>
-                    <td class="col-xs-2"><?php echo $r['current_department_manager']; ?></td>
-                    <td class="col-xs-2"><?php echo $r['current_title']; ?></td>
+            <tr>
+                <td class="col-xs-2"><?php echo $r['emp_id']; ?></td>
+                <td class="col-xs-4"><?php echo $r['emp_name']; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['current_manager_name']) ? $r['current_manager_name'] : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['current_salary']) ? number_format($r['current_salary'],2) : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['current_department']) ? $r['current_department'] : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['current_department_manager']) ? $r['current_department_manager'] : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['current_title']) ? $r['current_title'] : ''; ?></td>
 
-                    <td class="col-xs-2"><?php echo !empty($r['hire_date']) ? $r['hire_date'] : ''; ?></td>
-                    <td class="col-xs-2"><?php echo !empty($r['gender']) ? $r['gender'] : ''; ?></td>
-                    <td class="col-xs-2"><?php echo !empty($r['date_of_birth']) ? $r['date_of_birth'] : ''; ?></td>
+                <td class="col-xs-3"><?php echo !empty($r['hire_date']) ? date('d M Y',strtotime($r['hire_date'])) : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['gender']) ? $r['gender'] : ''; ?></td>
+                <td class="col-xs-3"><?php echo !empty($r['date_of_birth']) ? date('d M Y',strtotime($r['date_of_birth'])) : ''; ?></td>
 
-                    <td class="col-xs-2"><?php echo $r['last_title']; ?></td>
-                    <td class="col-xs-2"><?php echo !empty($r['last_salary']) ? number_format($r['last_salary'],2) : ''; ?></td>
-                    <td class="col-xs-2"><?php echo $r['last_title_from_date']; ?></td>
-                    <td class="col-xs-2"><?php echo $r['last_title_to_date']; ?></td>
-                    <td class="col-xs-2"><?php echo $r['last_department']; ?></td>
-                    <td class="col-xs-2"><?php echo !empty($r['salary_hike_in_percentage']) ? number_format($r['salary_hike_in_percentage'],2) . '%' : ''; ?></td>
-                </tr>
-        <?php endwhile; ?>
+                <td class="col-xs-2"><?php echo !empty($r['last_title']) ? $r['last_title'] : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['last_salary']) ? number_format($r['last_salary'],2) : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['last_title_from_date']) ? date('d M Y',strtotime($r['last_title_from_date'])) : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['last_title_to_date']) ? date('d M Y',strtotime($r['last_title_to_date'])) : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['last_department']) ? $r['last_department'] : ''; ?></td>
+                <td class="col-xs-2"><?php echo !empty($r['salary_hike_in_percentage']) ? number_format($r['salary_hike_in_percentage'],2) . '%' : ''; ?></td>
+            </tr>
+
+        <?php $flag = true; endwhile; ?>
         </table><br/>
-        <?php echo "<br/><br/>";print_r($q->fetch());?>
-        <a class="btn btn-primary download-excel"> Download as Excel</a>
+
+        <?php if($flag): ?>
+            <a class="btn btn-primary" href="download_excel.php"> Download as Excel</a>
+        <?php endif;?>
+    </div>
     </div>
 </body>
 </html>
-
-
-
-<?php
-    /*
-
-        $xls = new Excel('Report');
-        foreach ($rows as $num => $row) {
-          $xls->home();
-          $xls->label($row['id']);
-          $xls->right();
-          $xls->label($row['title']);
-          $xls->down();
-        }
-        ob_start();
-        $data = ob_get_clean();
-        file_put_contents(__DIR__ .'/report.xls', $data);
-    */
-
-?>
