@@ -92,7 +92,7 @@
         </table><br/>
 
         <?php if($flag): ?>
-            <a class="btn btn-primary" href="download_excel.php"> Download as Excel</a>
+            <a class="btn btn-primary" href="employee_excel.php"> Download as Excel</a>
         <?php endif;?>
     </div>
     </div>
