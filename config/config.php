@@ -166,5 +166,18 @@ class db extends PDO {
 		
 		return $this->run($sql, $bind);
 	}
+
+	public function runProcedure($procedureName) {
+		try {
+			$conn = new PDO("mysql:host=127.0.0.1;port=3306;dbname=ems", "root", "root");
+            // execute the stored procedure
+            $sql = $procedureName;
+            $q = $conn->query($sql);
+            $q->setFetchMode(PDO::FETCH_ASSOC);
+            return $q;
+        } catch (PDOException $pe) {
+            die("Error occurred:" . $pe->getMessage());
+        }
+	}
 }	
 ?>

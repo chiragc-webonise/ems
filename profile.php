@@ -102,6 +102,7 @@
 				<li><a href="employee.php">Employee</a></li>
 				<li><a href="department.php">Departments</a></li>
 				<li><a href="job_title.php">Job Titles</a></li>
+				<li><a href="view_employees.php">View Employee List</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right" style="text-align:right;" >
 				<li class="active"><a href="profile.php">Profile</a></li>
