@@ -3,7 +3,9 @@
 	$error = array();
 	$config = dirname(__FILE__)."/config/config.php";
 	include $config;
-	$db = new db("mysql:host=127.0.0.1;port=3306;dbname=ems", "root", "root");
+	$header = dirname(__FILE__)."/config/header.php";
+	include $header;
+	$db = new db("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
 	$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 	$loginEmpID = isset($_SESSION['empID']) ? $_SESSION['empID'] : '';
 	if(isset($username)){
