@@ -1,4 +1,4 @@
-<?php
+<?php 
 	session_start();
 	$error = array();
 	$config = dirname(__FILE__)."/config/config.php";
